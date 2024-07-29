@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="UTF-8"/>
+    <title>Project Viewer</title>
+    <link rel="icon" type="image/x-icon" href="/static/PD_LOGO.png">
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
+
+        input[type=text] {
+          width: 75%;
+          padding: 12px 20px;
+          margin: 8px 0;
+          box-sizing: border-box;
+        }
+        textarea {
+          width: 75%;
+          padding: 12px 20px;
+          box-sizing: border-box;
+          border: 2px solid #ccc;
+          border-radius: 4px;
+          background-color: #f8f8f8;
+          resize: vertical;
+        }
+    </style>
+
+      <script>
+        function openForm() {
+          document.getElementById("myForm").style.display = "block";
+        }
+
+        function closeForm() {
+          document.getElementById("myForm").style.display = "none";
+        }
+    </script>
+  </head>
+
+
+
+
+  <body class="w3-theme-l5">
+    {% include 'navbar.html' %}
+
+
+  <!-- Page Container -->
+    <div class="w3-container w3-content" style="max-width:1900px;margin-top:80px">
+      <!-- The Grid -->
+      <div class="w3-row">
+        <!-- Projects Col -->
+        <div class="w3-col" style="min-width: 500px">
+            <div class="w3-row-padding">
+                <div class="w3-col m12">
+                  <div class="w3-card w3-round w3-white">
+                    <div class="w3-container w3-padding">
+                      <div class="w3-col w3-row-padding" style="padding:10px; font-size: 50px">{{ project.name }}</div>
+                      <div class="w3-col w3-row-padding" style="padding:10px; font-size: 35px">Created by <a href="/profile/{{owner.username}}"><name style="font-size: 35px">{{ owner.username }}</name></a></div>
+                      {% if current_user and not current_user.is_user_applying_to_project(project) and not current_user in members and not current_user == owner %}
+                        <div class="w3-col w3-row-padding">
+                            <form method="POST" action="{{ url_for('apply_to_project', project_id=project.id, user_id=current_user.id) }}">
+                                <button type="submit" class="w3-button w3-theme-d1 w3-margin-bottom">Apply</button>
+                            </form>
+                        </div>
+                      {% endif %}
+                      <h1>Project Specializations:</h1>
+                      {% if current_user %}
+                          {% if current_user.id == owner.id %}
+                                <h2>Missing any proficiencies?</h2>
+                                <button class = "open-button w3-button w3-theme-d1 w3-margin-bottom" onclick="openForm()">Add More</button>
+                                <div class="form-popup w3-border w3-panel" id="myForm" style="display: none">
+                                  <form class="w3-col" method="GET">
+                                    <dl>
+                                      {% from "_formhelpers.html" import render_field %}
+                                      {{ render_field(spec_form.specialization) }}
+                                    </dl>
+                                    <p>
+                                      <input type="submit" value="Confirm" class="w3-button w3-theme-d1 w3-margin-bottom">
+                                      <input value="Cancel" class="w3-button w3-theme-d1 w3-margin-bottom" onclick="closeForm()">
+                                  </form>
+                                </div>
+                        {% endif %}
+                      {% endif %}
+                      <ul>
+                        {% for spec in specializations %}
+                            <li class="w3-border-top w3-border-bottom w3-padding-16">
+                            {{ spec }}
+                            {% if current_user == owner %}
+                                <a href="{{ url_for('remove_spec_project', id=project.id, spec=spec) }}" id="Remover" style="color: red; text-decoration: none">X</a>
+                            {% endif %}
+                            </li>
+                        {% endfor %}
+                        </ul>
+                      <div class="w3-col w3-row-padding" style="padding:10px; font-size: 35px">Description:</div><br>
+                      <div class="w3-col w3-row-padding" style="padding:10px; font-size: 20px; white-space: pre-line; overflow: scroll; max-height: 600px">{{ project.description }}</div>
+                      {% if members %}
+                      <div class="w3-col w3-row-padding" style="padding:10px; font-size: 35px">Contributors:</div>
+                      {% endif %}
+
+                      {% for member in members %}
+                      <div class="w3-col w3-row-padding" style="padding:10px; font-size: 30px"><a href="/profile/{{member.username}}"><user style="font-size: 30px">{{ member.username }}</user></a></div>
+                      {% endfor %}
+
+                      {% if current_user %}
+                          {% from "_formhelpers.html" import render_field %}
+                          <form class="w3-col" method="POST">
+                            <dl>
+                              {{ render_field(comment_form.comment) }}
+                            </dl>
+                            <p>
+                              <input type="submit" value="Comment" class="w3-button w3-theme-d1 w3-margin-bottom">
+                          </form>
+                          {% for comment in comments_in_project %}
+                              <div class="w3-col w3-border-top" style="padding-bottom: 10px">
+                                  <div class="w3-col w3-row-padding" style="padding:10px; font-size: 20px">{{ comment.user }}:</div>
+                                  <br>
+                                  <div class="w3-col w3-row-padding" style="padding-left:25px; font-size: 14px">{{ comment.comment }}</div>
+                              </div>
+                          {% endfor %}
+                      {% else %}
+                          Please log in to view and create comments.
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+
+</html>

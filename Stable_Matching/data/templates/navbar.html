@@ -1,0 +1,20 @@
+<style>
+  html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
+  a {font-size: 20px}
+</style>
+
+<body>
+<!-- Navbar -->
+<div class="w3-top">
+    <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
+        <a href="/" class="w3-bar-item w3-button w3-padding-large w3-theme-d4" title="home"><img src="/static/PD_LOGO.png" alt="Website Logo" style="width: 8%; height: 8%">Home</a>
+        <a href="/projects" class="w3-bar-item w3-button w3-padding-large w3-hover-white" title="Projects"><i class="fa fa-globe w3-margin-right"></i>Projects</a>
+        {% if current_user != None %}
+            <a href="/logout" class="w3-bar-item w3-button w3-padding-large w3-hover-white w3-right" title="Log Out"><i class="fa fa-user w3-margin-right"></i>Log Out</a>
+            <a href="/profile/{{ current_user.username }}" class="w3-bar-item w3-button w3-padding-large w3-hover-white w3-right" title="Profile"><i class="fa fa-user w3-margin-right"></i>Profile</a>
+        {% else %}
+            <a href="/login" class="w3-bar-item w3-button w3-padding-large w3-hover-white w3-right" title="Login"><i class="fa fa-user w3-margin-right"></i>Login</a>
+            <a href="/register" class="w3-bar-item w3-button w3-padding-large w3-hover-white w3-right" title="Register"><i class="fa fa-user w3-margin-right"></i>Register</a>
+        {% endif %}
+    </div>
+</div>

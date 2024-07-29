@@ -1,0 +1,15 @@
+projects{
+    display: flex;
+    flex-wrap: wrap;
+    width: 55%;
+}
+
+project{
+    flex: 0 0 30%;
+    display: grid;
+    padding-bottom: 50px;
+}
+
+project_name{
+    padding: 2px;
+}

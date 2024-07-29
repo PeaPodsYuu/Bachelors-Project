@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="UTF-8"/>
+    <title>Landing Page</title>
+    <link rel="icon" type="image/x-icon" href="/static/PD_LOGO.png">
+          <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+          <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+          <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+      <style>
+          html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
+          a {font-size: 30px}
+          name {font-size: 40px}
+      </style>
+  </head>
+
+
+
+
+  <body class="w3-theme-l5">
+    {% include 'navbar.html' %}
+
+  <div class="w3-container w3-content" style="margin-top:80px;max-width:1900px">
+      <div class="w3-row">
+
+            <!-- Account Col -->
+            <div class="w3-col" style="min-width: 300px; width:20%">
+                <div class="w3-row-padding">
+                    <div class="w3-col m12">
+                      <div class="w3-card w3-round w3-white">
+                        <div class="w3-container w3-padding">
+                          <user>
+                            <h1>Welcome,<br>
+                            {% if current_user == None %}
+
+                                  <name>Guest!</name>
+                                  <form method="POST" action="/register">
+                                    <button type="submit" class="w3-button w3-theme-d1 w3-margin-bottom">Register</button>
+                                  </form>
+
+                                  <form method="POST" action="/login">
+                                    <button type="submit" class="w3-button w3-theme-d1 w3-margin-bottom">Login</button>
+                                  </form>
+
+
+                            {% else %}
+
+                                  <name>{{ current_user.username }}</name>
+
+                                  <a href="/logout" methods="[POST]" class="w3-button w3-theme-d1 w3-margin-bottom w3-col m12">Log Out</a>
+
+                                  <a href="/create_project" methods="[POST]" class="w3-button w3-theme-d1 w3-margin-bottom w3-col m12">Create Project</a>
+
+                                  <a href="/projects" methods="[POST]" class="w3-button w3-theme-d1 w3-margin-bottom w3-col m12">Project Browser</a>
+
+                                  {% if current_user.is_admin == "True" %}
+                                      <a href="/perform_matching" methods="[POST]" class="w3-button w3-theme-d1 w3-margin-bottom w3-col m12">ADMIN: PERFORM MATCHING</a>
+                                  {% endif %}
+
+                            {% endif %}
+                            </h1>
+                          </user>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Col -->
+            <div class="w3-rest" style="min-width: 300px; width:80%">
+                <div class="w3-row-padding">
+                    <div class="w3-col m12">
+                      <div class="w3-card w3-round w3-white">
+                        <div class="w3-container w3-padding">
+                            <projects>
+                            {% for project in projects %}
+                                <div class = "w3-row w3-padding w3-border m4">
+                                    <project_name class="w3-col"><a href="project/{{project.id}}">{{ project.name }}</a></project_name>
+                                    <br>
+                                <project_description class="w3-col" style="overflow: scroll; max-height: 100px">{{ project.description }}</project_description>
+                                    </project>
+                                </div>
+                            {% endfor %}
+                            </projects>
+                            {% if not projects %}
+                                {% if current_user == None %}
+                                    <div class = "w3-padding w3-border" style="font-size: 30px">Welcome! Please consider
+                                        <a style="font-size: 30px" href="/register">making an account</a>
+                                        , or if you already have one,
+                                        <a style="font-size: 30px" href="/login">logging in</a>!<br>
+                                        Alternatively, free feel to
+                                        <a style="font-size: 30px" href="/projects">browse the project catalogue</a>!
+                                    </div>
+                                {% else %}
+                                    <div class = "w3-padding w3-border m4" style="font-size: 30px">
+                                        You are part of no projects, consider
+                                        <a style="font-size: 30px" href="/projects">applying for some</a> or
+                                        <a style="font-size: 30px" href="/create_project">creating one!</a>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+      </div>
+  </div>
+  </body>
+
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>Profile Viewer</title>
+    <link rel="icon" type="image/x-icon" href="/static/PD_LOGO.png">
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+        <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
+        project_name {font-size: 25px}
+        project_description {font-size: 18px}
+    </style>
+
+    <script>
+        function openForm() {
+          document.getElementById("myForm").style.display = "block";
+        }
+
+        function closeForm() {
+          document.getElementById("myForm").style.display = "none";
+        }
+    </script>
+</head>
+
+<body>
+    {% include 'navbar.html' %}
+    {% from './_formhelpers.html' import render_field %}
+
+    <div class="w3-container w3-content" style="max-width:1900px;margin-top:80px">
+      <!-- The Grid -->
+      <div class="w3-row">
+        <div class="w3-col w3-row-padding" style="padding:10px; font-size: 50px">Page of <user>{{user.username}}</user></div>
+
+        <!-- Projects Col -->
+        <div class="w3-col" style="min-width: 500px">
+            <div class="w3-row-padding">
+                <div class="w3-col m4">
+                  <div class="w3-card w3-round w3-white">
+                    <div class="w3-container w3-padding">
+                        {% if current_user == user %}
+                            <h1>Your Specializations:</h1>
+                            <h2>Missing any proficiencies?</h2>
+                            <button class = "open-button w3-button w3-theme-d1 w3-margin-bottom" onclick="openForm()">Add More</button>
+                            <div class="form-popup w3-border w3-panel" id="myForm" style="display: none">
+                              <form class="w3-col" method="GET">
+                                <dl>
+                                  {{ render_field(form.specialization) }}
+                                  {{ render_field(form.level) }}
+                                </dl>
+                                <p>
+                                  <input type="submit" value="Confirm" class="w3-button w3-theme-d1 w3-margin-bottom">
+                                  <input value="Cancel" class="w3-button w3-theme-d1 w3-margin-bottom" onclick="closeForm()">
+                              </form>
+                            </div>
+                        {% else %}
+                            <h1>{{ user.username }}'s Specializations:</h1>
+                        {% endif %}
+                        <ul>
+                        {% for spec, level in specializations.items() %}
+                            <li class="w3-border-top w3-border-bottom w3-padding-16">
+                            {{ spec }} : {{ level }}
+                            {% if current_user == user %}
+                                <a href="{{ url_for('remove_spec', name=user.username, spec=spec) }}" id="Remover" style="color: red; text-decoration: none">X</a>
+                            {% endif %}
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="w3-col m8">
+                  <div class="w3-card w3-round w3-white">
+                    <div class="w3-container w3-padding">
+                        {% if current_user == user %}
+                        <h1>Your Projects:</h1>
+                        {% else %}
+                        <h1>{{ user.username }}'s Projects:</h1>
+                        {% endif %}
+                        {% if projects_owned %}
+                            {% for project in projects_owned %}
+                            <br>
+                            <a href = '/project/{{project.id}}'>{{ project.name }}</a>
+                            {% endfor %}
+
+                        {% else %}
+
+                            {% if current_user == user %}
+                            <h2>You have created no projects so far. <a href="/create_project">Consider creating one!</a></h2>
+                            {% else %}
+                            <h2>This user has created no projects so far.</h2>
+                            {% endif %}
+
+
+                        {% endif %}
+
+                        <h1>Projects joined:</h1>
+                        {% if projects_joined %}
+                            {% for project in projects_joined %}
+                            <br>
+                            <a href = '/project/{{project.id}}'>{{ project.name }}</a>
+                            {% endfor %}
+
+                        {% else %}
+
+                            {% if current_user == user %}
+                            <h2>You have joined no projects so far. <a href="/projects" style="font-size: 30px">Consider applying for one!</a></h2>
+                            {% else %}
+                            <h2>This user has joined no projects so far.</h2>
+                            {% endif %}
+
+                        {% endif %}
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+</body>
+
+</html>

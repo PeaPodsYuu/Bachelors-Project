@@ -1,0 +1,15 @@
+header{
+    display: flex;
+    width: fit-content;
+    height: fit-content;
+}
+
+name{
+    color: blue;
+}
+
+button{
+    color: deeppink;
+    width: 100px;
+    height: 20px;
+}

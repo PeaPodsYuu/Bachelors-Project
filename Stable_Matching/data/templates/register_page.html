@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="UTF-8"/>
+    <title>Projects</title>
+    <link rel="icon" type="image/x-icon" href="/static/PD_LOGO.png">
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
+        project_name {font-size: 25px}
+        project_description {font-size: 18px}
+        input[type=text], input[type=password] {
+          width: 75%;
+          padding: 12px 20px;
+          margin: 8px 0;
+          box-sizing: border-box;
+        }
+        label {
+          font-size: 30px;
+        }
+        textarea {
+          width: 75%;
+          padding: 12px 20px;
+          box-sizing: border-box;
+          border: 2px solid #ccc;
+          border-radius: 4px;
+          background-color: #f8f8f8;
+          resize: vertical;
+        }
+    </style>
+
+  </head>
+
+  <body class="w3-theme-l5">
+  {% include 'navbar.html' %}
+
+  <!-- Page Container -->
+    <div class="w3-container w3-content" style="max-width:1900px;margin-top:80px">
+      <!-- The Grid -->
+      <div class="w3-row">
+        <!-- Projects Col -->
+        <div class="w3-col" style="min-width: 500px">
+            <div class="w3-row-padding">
+                <div class="w3-col m12">
+                  <div class="w3-card w3-round w3-white">
+                    <div class="w3-container w3-padding">
+                      <div class="w3-col" style="font-size: 50px">Register</div>
+
+                      {% from "_formhelpers.html" import render_field %}
+                      <form class="w3-col" method="POST">
+                        <dl>
+                          {{ render_field(form.username) }}
+                          {{ render_field(form.email) }}
+                          {{ render_field(form.password) }}
+                          {{ render_field(form.confirm) }}
+                        </dl>
+                        <p><input type="submit" value="Register" class="w3-button w3-theme-d1 w3-margin-bottom w3-margin-left w3-col" style="height: 50px; width: 75%">
+                      </form>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+
+
+  </body>
+
+</html>
